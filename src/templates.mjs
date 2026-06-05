@@ -148,16 +148,34 @@ ${langToggle}
 <script>
 (function(){
   var LANG = '${lang}';
+  // Compute the .futuros.io domain attribute once; reused by the
+  // page-load write and the pill click-handler write below.
+  var DOMAIN_ATTR = (function(){
+    try {
+      var host = window.location.hostname;
+      var isLocal = host === 'localhost' || /^\\d{1,3}(\\.\\d{1,3}){3}$/.test(host);
+      var parts = host.split('.');
+      return !isLocal && parts.length >= 2 ? '; domain=.' + parts.slice(-2).join('.') : '';
+    } catch(_) { return ''; }
+  })();
+  function writeLangCookie(v){
+    try { document.cookie = 'futuros_lang=' + v + '; path=/; max-age=31536000; SameSite=Lax' + DOMAIN_ATTR; } catch(_) {}
+  }
   // Write the language cookie scoped to the parent .futuros.io so every
   // subdomain sees the user's current choice. 1-year max-age matches
   // the marketing site's lang cookie.
-  try {
-    var host = window.location.hostname;
-    var isLocal = host === 'localhost' || /^\\d{1,3}(\\.\\d{1,3}){3}$/.test(host);
-    var parts = host.split('.');
-    var domainAttr = !isLocal && parts.length >= 2 ? '; domain=.' + parts.slice(-2).join('.') : '';
-    document.cookie = 'futuros_lang=' + LANG + '; path=/; max-age=31536000; SameSite=Lax' + domainAttr;
-  } catch(_) {}
+  writeLangCookie(LANG);
+  // Pill click handler: write the NEW language to the cookie BEFORE the
+  // browser navigates to the new page. Without this, the head-script
+  // redirect on the next page reads the stale cookie (=current page's
+  // lang) and bounces you back. With this, navigation from /es/ → /
+  // writes 'en' first, so the head-script sees 'en' and stays at /.
+  document.querySelectorAll('.lt-btn').forEach(function(el){
+    el.addEventListener('click', function(){
+      var next = el.getAttribute('data-lang');
+      if (next === 'en' || next === 'es' || next === 'ca') writeLangCookie(next);
+    });
+  });
   // Cookie consent banner.
   var banner = document.getElementById('fsCookies');
   function readCookie(name){
