@@ -71,12 +71,12 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
 <body>
 <header class="site-head"><div class="wrap site-head-in">
   <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
-  <nav class="site-nav"><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}">${esc(L.subscribe)}</a></nav>
+  <nav class="site-nav"><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
 <section class="subscribe"><div class="wrap subscribe-in">
   <h2>${esc(L.subscribeCta)}</h2><p>${esc(L.subscribeSub)}</p>
-  <a class="btn-cta" href="${SITE.newsletterUrl}">${esc(L.subscribe)} →</a>
+  <a class="btn-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)} →</a>
 </div></section>
 <footer class="site-foot"><div class="wrap site-foot-in">
   <div>© ${YEAR} ${esc(SITE.brand)} · <a href="${SITE.siteUrl}">futuros.io</a></div>${langSwitch}

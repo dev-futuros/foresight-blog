@@ -7,6 +7,7 @@ import path from 'node:path';
 import { SITE } from './src/config.mjs';
 import { fetchIssues } from './src/data.mjs';
 import { renderHome, renderArchive, renderSector, renderIssue } from './src/templates.mjs';
+import { renderSubscribe } from './src/subscribe-template.mjs';
 import { urlHome, urlArchive, urlSector, urlIssue } from './src/urls.mjs';
 import { slugify } from './src/util.mjs';
 
@@ -40,6 +41,8 @@ function sitemap(issues, present){
     for(const s of present) add(urlSector(lang, s));
     for(const it of issues.filter(i => i.content && i.content[lang])) add(urlIssue(lang, it), it.date);
   }
+  // Subscribe page is a single URL — runtime i18n covers all languages.
+  add('/subscribe.html');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 }
 function rss(issues){
@@ -81,6 +84,13 @@ async function main(){
     }
     for(const it of li){ writePage(urlIssue(lang, it), renderIssue(it, lang, ctx)); pageCount++; }
   }
+
+  // Standalone subscribe page. Single file at /subscribe.html — language
+  // comes from ?lang= URL param (set by the subscribe button in the
+  // page template), or falls back to the cross-domain `futuros_lang`
+  // cookie. No per-language directory variants; the client-side i18n
+  // covers all three.
+  writeFile('subscribe.html', renderSubscribe());
 
   writeFile('sitemap.xml', sitemap(issues, present));
   writeFile('rss.xml', rss(issues));

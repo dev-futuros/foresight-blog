@@ -6,7 +6,10 @@ export const SITE = {
   description: 'A weekly foresight brief — the strategic signals reshaping one sector at a time: technology, FMCG, energy & climate, and mobility.',
   origin: 'https://blog.futuros.io',          // the hub's own subdomain
   siteUrl: 'https://futuros.io',               // the marketing site
-  newsletterUrl: 'https://futuros.io/#subscribe', // TODO: point at the MailerLite form
+  // Base path of the subscribe page (rendered into dist/subscribe.html
+  // by build.mjs). Templates append `?lang=<lang>` so the form renders
+  // in the same language as the blog page the visitor came from.
+  newsletterUrl: '/subscribe.html',
   twitter: '@futuros',
   defaultLang: 'en',
   langs: ['en', 'es', 'ca'],
