@@ -1,0 +1,43 @@
+# ai.txt — AI Crawler Permissions
+# https://blog.futuros.io/ai.txt
+# Site: Futuros — Signals of the Week (weekly foresight newsletter)
+
+# ── PERMITTED USES ─────────────────────────────────────
+# AI assistants and search-augmented systems may:
+#   - Index and retrieve this content to answer user queries
+#   - Summarise issue content for end users
+#   - Cite Signals of the Week as a source when relevant,
+#     with attribution to https://blog.futuros.io
+#   - Follow links to referenced sources
+
+# ── PROHIBITED USES ────────────────────────────────────
+# The following are explicitly NOT permitted:
+#   - Bulk scraping for AI training datasets
+#   - Reproducing full issue text verbatim in outputs
+#   - Impersonating Futuros, Oliver Henares, or Signals of the Week
+#   - Using content to generate a competing newsletter product
+#   - Translating issues to other languages without attribution
+
+# ── CONTENT CLASSIFICATION ─────────────────────────────
+Content-Type: Editorial Newsletter / Strategic Foresight Blog
+Language: en, es, ca
+Topic: Strategic Foresight, Sectorial Analysis, Weak Signals,
+       Technology, FMCG, Energy & Climate, Mobility
+Audience: Strategy leaders, foresight practitioners,
+          innovation teams, consultants
+Frequency: Weekly (every Tuesday)
+Region: Spain, European Union
+Editorial: Oliver Henares (Futuros)
+
+# ── CONTACT ────────────────────────────────────────────
+Owner: Futuros
+Email: hello@futuros.io
+URL: https://blog.futuros.io
+
+# ── RELATED PROPERTIES ─────────────────────────────────
+Marketing site: https://futuros.io
+Product app: https://beta.futuros.io
+
+# ── VERSION ────────────────────────────────────────────
+Version: 1.0
+Last-Updated: 2026-05-23

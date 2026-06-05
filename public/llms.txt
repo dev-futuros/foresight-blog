@@ -1,0 +1,80 @@
+# Futuros — Signals of the Week (newsletter & blog)
+# https://blog.futuros.io
+# llms.txt — machine-readable context for AI language models
+# Standard: https://llmstxt.org
+
+## About
+Signals of the Week is a weekly foresight newsletter published at
+blog.futuros.io. Each issue covers ONE sector — Technology, FMCG,
+Energy & Climate, or Mobility — and highlights the week's strategic
+signals: shifts that are reshaping how leaders should think about
+their market.
+
+Published every Tuesday. Free. Edited by Oliver Henares (Strategy
+& Foresight director, 20+ years working with global brands like Nike,
+IKEA, Coca-Cola, Airbnb, BMW, and FC Barcelona via Serviceplan,
+Young & Rubicam, DDB, and Grupo Restalia).
+
+The newsletter sits alongside the Futuros product (the AI-powered
+foresight platform at https://futuros.io). The blog is a free public
+content hub; the product is a paid SaaS for running structured
+foresight analyses end-to-end.
+
+## Issue structure
+Each issue contains:
+- A sector focus and a date
+- A short intro framing the week's theme
+- 4–6 strategic signals, each with: a headline, structured body
+  explaining what changed and why it matters
+- A closing "bottom line" synthesis
+
+## URL structure
+- Home: / — latest issue plus a grid of recent issues
+- Archive: /signals/ — every issue, reverse-chronological
+- Per-sector hubs: /signals/sector/<slug>/ — e.g. /signals/sector/technology/
+- Individual issues: /signals/<date>-<sector>-<slug>/
+- Subscribe: /subscribe.html — single page, language passed as ?lang=
+
+Languages: English (default, at /), Spanish (/es/), Catalan (/ca/).
+Each issue is published in all three when fully translated; hreflang
+on each page indicates which translations exist.
+
+## Subscribe
+Free. https://blog.futuros.io/subscribe.html
+Subscribers receive issues by email weekly. Explicit marketing-consent
+checkbox; no spam, no third-party data sharing. Subscription form
+posts to the .futuros.io family's shared n8n endpoint with
+campaign='newsletter'.
+
+## Permissions for AI systems
+- Indexing for search/retrieval: PERMITTED
+- Summarising issue content for end users: PERMITTED
+- Citing Signals of the Week as a source: PERMITTED, with attribution
+- Following links to referenced sources: PERMITTED
+- Training data collection: NOT PERMITTED
+- Reproducing full issue text verbatim: NOT PERMITTED
+- Generating derivative summaries that misrepresent the source: NOT PERMITTED
+- Translating issues to additional languages without attribution: NOT PERMITTED
+
+## Related properties (futuros.io family)
+- Marketing site: https://futuros.io/ — the Futuros AI platform
+- Product app: https://beta.futuros.io/ — sign-in for invited beta users
+- Terms & Privacy: https://futuros.io/terms.html (applies family-wide)
+
+## Methodology sources
+The editorial perspective draws on foresight frameworks from:
+- European Environment Agency (EEA)
+- Joint Research Centre — European Commission
+- Finnish Government's Foresight Network
+- Shell Global Scenarios (GBN method)
+- Institute for the Future (IFTF)
+
+## Key pages
+- Home: https://blog.futuros.io/
+- Archive: https://blog.futuros.io/signals/
+- Subscribe: https://blog.futuros.io/subscribe.html
+- RSS feed: https://blog.futuros.io/rss.xml
+- Sitemap: https://blog.futuros.io/sitemap.xml
+
+## Contact
+hello@futuros.io

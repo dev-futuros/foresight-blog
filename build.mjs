@@ -61,6 +61,13 @@ async function main(){
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
   copyDir(path.resolve('assets'), path.join(DIST, 'assets'));
+  // public/ → dist/ root. Hosts the static-but-editable meta files:
+  // llms.txt, ai.txt, humans.txt, security.txt. Runs BEFORE the
+  // writeFile calls below so the generated sitemap.xml / rss.xml /
+  // robots.txt / _headers win if there's ever a name collision —
+  // the dynamic ones know things (issue list, feed) that public
+  // can't.
+  copyDir(path.resolve('public'), DIST);
 
   const issues = (await fetchIssues()).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   console.log(`Building ${issues.length} released issue(s)…`);

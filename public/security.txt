@@ -1,0 +1,8 @@
+# security.txt — blog.futuros.io
+# Convention is /.well-known/security.txt; we also serve at root.
+# Standard: https://securitytxt.org (RFC 9116)
+
+Contact: mailto:hello@futuros.io
+Expires: 2027-05-23T00:00:00.000Z
+Preferred-Languages: en, es, ca
+Canonical: https://blog.futuros.io/.well-known/security.txt

@@ -1,0 +1,34 @@
+/* humans.txt — blog.futuros.io */
+/* Standard: https://humanstxt.org  */
+
+/* TEAM */
+  Editor · Strategy & Foresight: Oliver Henares
+  Editorial: Futuros team
+  Contact: hello@futuros.io
+  Location: Barcelona, España
+
+/* NEWSLETTER */
+  Title: Signals of the Week
+  Frequency: Weekly (every Tuesday)
+  Cost: Free
+  Languages: English, Spanish, Catalan
+  Subscribe: https://blog.futuros.io/subscribe.html
+
+/* SITE */
+  Last update: 2026-05-23
+  Languages: English (primary), Spanish, Catalan
+  Technology: Plain Node.js static-site generator (zero framework deps)
+  Fonts: Playfair Display, DM Sans, DM Mono (Google Fonts)
+  Analytics: Mixpanel (EU residency, consent-gated)
+  Hosting: Cloudflare Pages
+
+/* RELATED PROPERTIES */
+  Marketing site: https://futuros.io
+  Product app: https://beta.futuros.io
+  Terms & Privacy (family-wide): https://futuros.io/terms.html
+
+/* THANKS */
+  Editorial perspective inspired by foresight practitioners at the
+  European Environment Agency, Joint Research Centre (European
+  Commission), Finnish Government's Foresight Network, Shell Global
+  Scenarios, and the Institute for the Future.
