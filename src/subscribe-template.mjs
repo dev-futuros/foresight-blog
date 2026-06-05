@@ -130,7 +130,7 @@ try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pat
    SUBSCRIBE PAGE — i18n + consent banner + form submit
    Lives on blog.futuros.io. Language comes from ?lang= URL param
    passed by the blog's subscribe button. Falls back to the
-   cross-domain `futuros_lang` cookie if no param.
+   cross-domain 'futuros_lang' cookie if no param.
 ═══════════════════════════════════════════════ */
 
 const TRANSLATIONS = {
