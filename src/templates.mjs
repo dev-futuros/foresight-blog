@@ -12,17 +12,26 @@ const T = {
     subscribeCta: 'Get Signals of the Week', subscribeSub: 'One sector, the week’s strategic signals, every Tuesday. Free.',
     readIssue: 'Read the issue', allIssues: 'All issues', bottomLine: 'The bottom line',
     archiveTitle: 'The archive', archiveSub: 'Every issue of Signals of the Week.',
-    sectorIn: 'Sector', noIssues: 'No issues published yet.', back: '← All issues', dateLocale: 'en-GB' },
+    sectorIn: 'Sector', noIssues: 'No issues published yet.', back: '← All issues', dateLocale: 'en-GB',
+    cookiesTitle: 'Cookies & analytics',
+    cookiesBody: "We may use analytics tools to understand how Futuros is used and improve it. We don't share data with advertisers or ad-tech third parties.",
+    cookiesLearn: 'Privacy Policy', cookiesAccept: 'Accept', cookiesReject: 'Decline' },
   es: { tagline: 'Foresight semanal sobre los cambios que están redefiniendo la estrategia.', latest: 'Última edición', archive: 'Archivo', subscribe: 'Suscríbete',
     subscribeCta: 'Recibe Signals of the Week', subscribeSub: 'Un sector, las señales estratégicas de la semana, cada martes. Gratis.',
     readIssue: 'Leer la edición', allIssues: 'Todas las ediciones', bottomLine: 'En resumen',
     archiveTitle: 'El archivo', archiveSub: 'Todas las ediciones de Signals of the Week.',
-    sectorIn: 'Sector', noIssues: 'Aún no hay ediciones publicadas.', back: '← Todas las ediciones', dateLocale: 'es-ES' },
+    sectorIn: 'Sector', noIssues: 'Aún no hay ediciones publicadas.', back: '← Todas las ediciones', dateLocale: 'es-ES',
+    cookiesTitle: 'Cookies y analítica',
+    cookiesBody: 'Podemos usar herramientas de analítica para entender cómo se usa Futuros y mejorarlo. No compartimos datos con anunciantes ni terceros publicitarios.',
+    cookiesLearn: 'Política de Privacidad', cookiesAccept: 'Aceptar', cookiesReject: 'Rechazar' },
   ca: { tagline: 'Foresight setmanal sobre els canvis que redefineixen l’estratègia.', latest: 'Última edició', archive: 'Arxiu', subscribe: 'Subscriu-t’hi',
     subscribeCta: 'Rep Signals of the Week', subscribeSub: 'Un sector, els senyals estratègics de la setmana, cada dimarts. Gratis.',
     readIssue: 'Llegir l’edició', allIssues: 'Totes les edicions', bottomLine: 'En resum',
     archiveTitle: 'L’arxiu', archiveSub: 'Totes les edicions de Signals of the Week.',
-    sectorIn: 'Sector', noIssues: 'Encara no hi ha edicions publicades.', back: '← Totes les edicions', dateLocale: 'ca-ES' },
+    sectorIn: 'Sector', noIssues: 'Encara no hi ha edicions publicades.', back: '← Totes les edicions', dateLocale: 'ca-ES',
+    cookiesTitle: 'Cookies i analítica',
+    cookiesBody: "Podem fer servir eines d'analítica per entendre com s'utilitza Futuros i millorar-lo. No compartim dades amb anunciants ni tercers publicitaris.",
+    cookiesLearn: 'Política de Privacitat', cookiesAccept: 'Acceptar', cookiesReject: 'Rebutjar' },
 };
 function t(lang){ return T[lang] || T.en; }
 function fmtDate(iso, lang){
@@ -54,21 +63,71 @@ ${altTags}${xDefault ? `<link rel="alternate" hreflang="x-default" href="${SITE.
 ${published ? `<meta property="article:published_time" content="${published}">` : ''}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="${SITE.twitter}">
+<!-- Cross-domain language redirect — runs before paint so users with
+     a stored 'es'/'ca' preference (set on the marketing site, app, or
+     elsewhere in the .futuros.io family) skip the English home and
+     land directly on their preferred-language home. Only fires at the
+     root URL ("/"); other URLs reflect explicit user intent. -->
+<script>
+(function(){
+  if (window.location.pathname !== '/') return;
+  var m = (document.cookie || '').match(/(?:^|; )futuros_lang=([^;]+)/);
+  var l = m ? decodeURIComponent(m[1]) : null;
+  if (l === 'es') window.location.replace('/es/');
+  else if (l === 'ca') window.location.replace('/ca/');
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/styles.css">
-${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ''}`;
+${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ''}
+<!-- Mixpanel analytics (EU residency, opt-out by default). Same project
+     as the marketing site so dashboards span the .futuros.io family.
+     Tagged with surface='blog' to separate from the marketing site
+     ('marketing') and the app ('app'). -->
+<script>
+(function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\\/\\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+mixpanel.init('a4b409c01e5f9a3b21db626b1cdefbbb', { api_host: 'https://api-eu.mixpanel.com', opt_out_tracking_by_default: true, record_sessions_percent: 100, record_mask_text_selector: 'input, textarea, [data-mp-mask]' });
+try { mixpanel.register({ surface: 'blog' }); } catch(_) {}
+try {
+  var _seg = (document.cookie || '').split('; ').find(function (c) { return c.indexOf('futuros_consent=') === 0; });
+  var _v = _seg ? decodeURIComponent(_seg.slice(16)) : null;
+  if (_v === 'accepted') {
+    mixpanel.opt_in_tracking();
+    if (typeof mixpanel.start_session_recording === 'function') mixpanel.start_session_recording();
+  }
+} catch(_) {}
+try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pathname, lang: '${lang}' }); } catch(_) {}
+</script>`;
 }
 
 function page({ lang, title, description, path, alternates, type = 'website', published, jsonld, body, sectors = [], active }){
   const L = t(lang);
   const nav = sectors.map(s =>
     `<a href="${urlSector(lang, s)}"${active === 'sector:' + s ? ' class="on"' : ''}>${esc(s)}</a>`).join('');
-  const langSwitch = (alternates && alternates.length > 1)
-    ? `<div class="lang-switch">${alternates.map(a => `<a href="${a.path}"${a.lang === lang ? ' class="on"' : ''}>${a.lang.toUpperCase()}</a>`).join('')}</div>` : '';
+  // Always render all 3 language pills, even if the current page has no
+  // alternate in some language. Missing alternates fall back to that
+  // language's home so the pill always navigates somewhere useful.
+  const altMap = Object.fromEntries((alternates || []).map(a => [a.lang, a.path]));
+  const langPills = SITE.langs.map(l => ({ lang: l, path: altMap[l] || urlHome(l) }));
+  const langToggle = `<div class="lang-toggle">${langPills.map(p =>
+    `<a class="lt-btn${p.lang === lang ? ' active' : ''}" href="${p.path}" data-lang="${p.lang}">${p.lang.toUpperCase()}</a>`).join('')}</div>`;
   return `<!DOCTYPE html><html lang="${HTML_LANG[lang] || 'en'}"><head>${head({ lang, title, description, path, alternates, type, published, jsonld })}</head>
 <body>
+<!-- Cross-domain cookie consent banner. Hidden if the visitor has
+     already decided on any .futuros.io subdomain — the cookie carries
+     the choice across the family. -->
+<div class="fs-cookies" id="fsCookies" role="dialog" aria-live="polite" aria-label="Cookies consent">
+  <div class="fs-cookies-text">
+    <div class="fs-cookies-title">${esc(L.cookiesTitle)}</div>
+    <div class="fs-cookies-body">${esc(L.cookiesBody)} <a href="${SITE.siteUrl}/terms.html?lang=${lang}">${esc(L.cookiesLearn)}</a>.</div>
+  </div>
+  <div class="fs-cookies-actions">
+    <button type="button" class="fs-cookies-reject" id="fsCookiesReject">${esc(L.cookiesReject)}</button>
+    <button type="button" class="fs-cookies-accept" id="fsCookiesAccept">${esc(L.cookiesAccept)}</button>
+  </div>
+</div>
 <header class="site-head"><div class="wrap site-head-in">
   <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
   <nav class="site-nav"><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
@@ -79,8 +138,70 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
   <a class="btn-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)} →</a>
 </div></section>
 <footer class="site-foot"><div class="wrap site-foot-in">
-  <div>© ${YEAR} ${esc(SITE.brand)} · <a href="${SITE.siteUrl}">futuros.io</a></div>${langSwitch}
+  <div>© ${YEAR} ${esc(SITE.brand)} · <a href="${SITE.siteUrl}">futuros.io</a></div>
 </div></footer>
+${langToggle}
+<!-- Cross-domain language cookie + consent banner control.
+     Cookie write: every page load stamps futuros_lang with the current
+     page's language so a later visit to futuros.io / beta.futuros.io
+     inherits it. Banner: shows only if no prior consent on .futuros.io. -->
+<script>
+(function(){
+  var LANG = '${lang}';
+  // Write the language cookie scoped to the parent .futuros.io so every
+  // subdomain sees the user's current choice. 1-year max-age matches
+  // the marketing site's lang cookie.
+  try {
+    var host = window.location.hostname;
+    var isLocal = host === 'localhost' || /^\\d{1,3}(\\.\\d{1,3}){3}$/.test(host);
+    var parts = host.split('.');
+    var domainAttr = !isLocal && parts.length >= 2 ? '; domain=.' + parts.slice(-2).join('.') : '';
+    document.cookie = 'futuros_lang=' + LANG + '; path=/; max-age=31536000; SameSite=Lax' + domainAttr;
+  } catch(_) {}
+  // Cookie consent banner.
+  var banner = document.getElementById('fsCookies');
+  function readCookie(name){
+    var prefix = name + '=';
+    var seg = (document.cookie || '').split('; ').find(function(c){return c.indexOf(prefix) === 0;});
+    if (!seg) return null;
+    try { return decodeURIComponent(seg.slice(prefix.length)); } catch(_) { return null; }
+  }
+  function cookieDomainAttr(){
+    var host = window.location.hostname;
+    var isLocal = host === 'localhost' || /^\\d{1,3}(\\.\\d{1,3}){3}$/.test(host);
+    var parts = host.split('.');
+    if (isLocal || parts.length < 2) return '';
+    return '; domain=.' + parts.slice(-2).join('.');
+  }
+  function writeConsent(v){
+    var maxAge = v === 'accepted' ? '; max-age=31536000' : '';
+    document.cookie = 'futuros_consent=' + encodeURIComponent(v) + '; path=/; SameSite=Lax' + maxAge + cookieDomainAttr();
+  }
+  function apply(decision){
+    if (!window.mixpanel) return;
+    if (decision === 'accepted' && typeof mixpanel.opt_in_tracking === 'function') {
+      mixpanel.opt_in_tracking();
+      if (typeof mixpanel.start_session_recording === 'function') {
+        try { mixpanel.start_session_recording(); } catch(_) {}
+      }
+    } else if (decision === 'rejected' && typeof mixpanel.opt_out_tracking === 'function') {
+      mixpanel.opt_out_tracking();
+    }
+  }
+  var stored = readCookie('futuros_consent');
+  if (stored === 'accepted' || stored === 'rejected') return; // already decided — banner stays hidden
+  setTimeout(function(){ banner.classList.add('fs-cookies-show'); }, 600);
+  document.getElementById('fsCookiesAccept').addEventListener('click', function(){
+    writeConsent('accepted'); apply('accepted');
+    try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pathname, lang: LANG }); } catch(_) {}
+    banner.classList.remove('fs-cookies-show');
+  });
+  document.getElementById('fsCookiesReject').addEventListener('click', function(){
+    writeConsent('rejected'); apply('rejected');
+    banner.classList.remove('fs-cookies-show');
+  });
+})();
+</script>
 </body></html>`;
 }
 
