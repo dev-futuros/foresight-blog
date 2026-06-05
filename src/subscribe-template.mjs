@@ -31,12 +31,21 @@ export function renderSubscribe(){
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap">
+<!-- Same font URL as the blog (templates.mjs) so .brand-mark renders at
+     real Playfair Display weight 600 instead of synthetic-bold of 500.
+     The marketing-style form/buttons below still work fine on these
+     weights; DM Sans variable axes provide what the form needs. -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
 <!-- Marketing site's stylesheet — owns .cta-form, .fs-cookies, .btn, etc.
      Loaded cross-subdomain; cached after first hit. Bump the ?v= here
      when bumping it on the marketing side. -->
 <link rel="stylesheet" href="https://futuros.io/styles.css?v=2026-05-23">
+<!-- Blog's stylesheet — owns .site-head, .brand, .brand-mark, etc.
+     so the topbar logo matches the rest of blog.futuros.io. Loaded
+     second so its :root tokens override marketing's where they overlap
+     (--bg / --text / --muted are nearly identical between the two). -->
+<link rel="stylesheet" href="/assets/styles.css">
 
 <!-- Mixpanel analytics (EU residency) -->
 <script>
@@ -83,17 +92,18 @@ try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pat
   </div>
 </div>
 
-<nav class="nav" id="mainNav">
-  <div class="nav-inner">
-    <a href="/" class="nav-brand">
-      <div class="nav-logo">Futuros</div>
-      <div class="nav-tag" data-i18n="nav.tag">Advanced AI Strategic Tools</div>
-    </a>
-    <div class="nav-links">
-      <a href="/" class="nav-link" data-i18n="sub.back">← Volver al blog</a>
-    </div>
-  </div>
-</nav>
+<!-- Topbar — matches the blog's header (site-head / brand / site-nav)
+     so subscribe.html reads visually as part of blog.futuros.io rather
+     than the marketing site. -->
+<header class="site-head"><div class="wrap site-head-in">
+  <a class="brand" href="/">
+    <span class="brand-mark">Futuros</span>
+    <span class="brand-sub">Signals of the Week</span>
+  </a>
+  <nav class="site-nav">
+    <a href="/" data-i18n="sub.back">← Volver al blog</a>
+  </nav>
+</div></header>
 
 <section class="section cta-final" id="newsletter" style="min-height:calc(100dvh - var(--nav-h));display:flex;align-items:center">
   <div class="container">
@@ -142,7 +152,6 @@ const TRANSLATIONS = {
   es: {
     'sub.meta.title':'Suscríbete — Futuros',
     'sub.meta.desc':'Recibe el newsletter de Futuros directamente en tu inbox. Sin spam.',
-    'nav.tag':'Advanced AI Strategic Tools',
     'sub.back':'← Volver al blog',
     'sub.eyebrow':'Newsletter',
     'sub.title':'Sigue al día con <em>Futuros.</em>',
@@ -162,7 +171,6 @@ const TRANSLATIONS = {
   en: {
     'sub.meta.title':'Subscribe — Futuros',
     'sub.meta.desc':'Get the Futuros newsletter directly in your inbox. No spam.',
-    'nav.tag':'Advanced AI Strategic Tools',
     'sub.back':'← Back to blog',
     'sub.eyebrow':'Newsletter',
     'sub.title':'Stay in the loop with <em>Futuros.</em>',
@@ -182,7 +190,6 @@ const TRANSLATIONS = {
   ca: {
     'sub.meta.title':'Subscriu-te — Futuros',
     'sub.meta.desc':'Rep el newsletter de Futuros directament al teu correu. Sense spam.',
-    'nav.tag':'Advanced AI Strategic Tools',
     'sub.back':'← Tornar al blog',
     'sub.eyebrow':'Newsletter',
     'sub.title':'Segueix al dia amb <em>Futuros.</em>',
