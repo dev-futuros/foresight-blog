@@ -130,7 +130,7 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
 </div>
 <header class="site-head"><div class="wrap site-head-in">
   <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
-  <nav class="site-nav"><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
+  <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
 <section class="subscribe"><div class="wrap subscribe-in">
