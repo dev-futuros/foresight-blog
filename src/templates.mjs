@@ -88,7 +88,7 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
      ('marketing') and the app ('app'). -->
 <script>
 (function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\\/\\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
-mixpanel.init('a4b409c01e5f9a3b21db626b1cdefbbb', { api_host: 'https://api-eu.mixpanel.com', opt_out_tracking_by_default: true, record_sessions_percent: 100, record_mask_text_selector: 'input, textarea, [data-mp-mask]' });
+mixpanel.init('a4b409c01e5f9a3b21db626b1cdefbbb', { api_host: 'https://api-eu.mixpanel.com', opt_out_tracking_by_default: true, record_sessions_percent: 100, record_mask_text_selector: 'input, textarea, [data-mp-mask]', cookie_domain: 'futuros.io', cross_subdomain_cookie: true });
 try { mixpanel.register({ surface: 'blog' }); } catch(_) {}
 try {
   var _seg = (document.cookie || '').split('; ').find(function (c) { return c.indexOf('futuros_consent=') === 0; });
@@ -189,7 +189,10 @@ ${langToggle}
     }
   }
   var stored = readCookie('futuros_consent');
-  if (stored === 'accepted' || stored === 'rejected') return; // already decided — banner stays hidden
+  if (stored === 'accepted' || stored === 'rejected') {
+    bindClickTracking();
+    return;
+  }
   setTimeout(function(){ banner.classList.add('fs-cookies-show'); }, 600);
   document.getElementById('fsCookiesAccept').addEventListener('click', function(){
     writeConsent('accepted'); apply('accepted');
@@ -200,6 +203,35 @@ ${langToggle}
     writeConsent('rejected'); apply('rejected');
     banner.classList.remove('fs-cookies-show');
   });
+  bindClickTracking();
+
+  // Click-tracking for funnel transitions:
+  //   - Subscribe Clicked: blog → blog.futuros.io/subscribe.html (Newsletter Subscribed)
+  //   - Article Clicked:   blog list view → article page (Article Viewed)
+  // Uses mixpanel.track_links — purpose-built to fire the event before
+  // navigation so it isn't dropped. Safe to call while opted out: the
+  // SDK silently discards the events.
+  function bindClickTracking(){
+    if (!window.mixpanel || typeof mixpanel.track_links !== 'function') return;
+    try {
+      mixpanel.track_links('a.nav-cta, a.btn-cta', 'Subscribe Clicked', function(el){
+        return {
+          location: el.classList.contains('nav-cta') ? 'top-nav' : 'bottom-cta',
+          lang: LANG,
+          source_path: window.location.pathname
+        };
+      });
+      mixpanel.track_links('a.card', 'Article Clicked', function(el){
+        var sectorEl = el.querySelector('.card-sector');
+        return {
+          target_path: el.getAttribute('href') || '',
+          target_sector: sectorEl ? sectorEl.textContent.trim() : '',
+          source_path: window.location.pathname,
+          lang: LANG
+        };
+      });
+    } catch(_){}
+  }
 })();
 </script>
 </body></html>`;
@@ -283,5 +315,23 @@ export function renderIssue(issue, lang, ctx){
   body += '</div>';
   if(cc.close) body += `<div class="issue-close"><div class="issue-close-label">${esc(L.bottomLine)}</div>${paras(cc.close)}</div>`;
   body += `<div class="issue-foot"><a href="${urlArchive(lang)}">${esc(L.back)}</a></div></article>`;
+  // Article-specific Mixpanel event. Fires in addition to the generic
+  // Page Viewed from the page template — Page Viewed gives top-line
+  // traffic; Article Viewed feeds article-grained funnels (e.g.,
+  // "Article Viewed (sector=Technology) → Subscribe Clicked → Newsletter
+  // Subscribed"). Safe whether the user is opted in or out — track() is
+  // a no-op on the SDK side when opted out.
+  body += `<script>
+try {
+  mixpanel.track('Article Viewed', {
+    surface: 'blog',
+    article_slug: ${JSON.stringify(issue.slug)},
+    article_sector: ${JSON.stringify(issue.sector)},
+    article_date: ${JSON.stringify(issue.date)},
+    article_title: ${JSON.stringify(subject)},
+    lang: ${JSON.stringify(lang)}
+  });
+} catch(_) {}
+</script>`;
   return page({ lang, title: `${subject} — ${SITE.title}`, description: cc.preview_text || SITE.description, path: urlIssue(lang, issue), alternates, type: 'article', published: issue.date + 'T08:00:00Z', jsonld, body, sectors: ctx.sectors, active: 'sector:' + issue.sector });
 }

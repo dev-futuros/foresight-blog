@@ -45,7 +45,12 @@ mixpanel.init('a4b409c01e5f9a3b21db626b1cdefbbb', {
   api_host: 'https://api-eu.mixpanel.com',
   opt_out_tracking_by_default: true,
   record_sessions_percent: 100,
-  record_mask_text_selector: 'input, textarea, [data-mp-mask]'
+  record_mask_text_selector: 'input, textarea, [data-mp-mask]',
+  // Cross-subdomain distinct_id: a visitor on blog.futuros.io clicking
+  // through to this page stays the same person in Mixpanel, so funnels
+  // like blog → subscribe → Newsletter Subscribed work end-to-end.
+  cookie_domain: 'futuros.io',
+  cross_subdomain_cookie: true
 });
 try { mixpanel.register({ surface: 'blog' }); } catch(_) {}
 try {
