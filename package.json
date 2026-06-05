@@ -1,0 +1,13 @@
+{
+  "name": "foresight-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Signals of the Week — public content hub (static site generator).",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "npx --yes serve dist -l 8088",
+    "dev": "node build.mjs && npx --yes serve dist -l 8088"
+  },
+  "engines": { "node": ">=18" }
+}
