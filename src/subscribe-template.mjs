@@ -59,8 +59,17 @@ mixpanel.init('a4b409c01e5f9a3b21db626b1cdefbbb', {
   // through to this page stays the same person in Mixpanel, so funnels
   // like blog → subscribe → Newsletter Subscribed work end-to-end.
   cookie_domain: 'futuros.io',
-  cross_subdomain_cookie: true
+  cross_subdomain_cookie: true,
+  // Register the surface tag from inside the loaded callback so it
+  // lands AFTER the SDK has loaded persisted state. Registering
+  // synchronously after init() is racy — the persistence-load step
+  // can overwrite freshly-written super props, which is why events
+  // like Newsletter Subscribed (and the server-synthesized
+  // session_start / session_end) were sometimes landing untagged.
+  loaded: function(mp) { try { mp.register({ surface: 'blog' }); } catch(_) {} }
 });
+// Belt-and-suspenders sync register — idempotent, covers the case
+// where the loaded callback never fires for any reason.
 try { mixpanel.register({ surface: 'blog' }); } catch(_) {}
 try {
   var _seg = (document.cookie || '').split('; ').find(function (c) { return c.indexOf('futuros_consent=') === 0; });
@@ -351,7 +360,13 @@ async function submitSubscribe(e){
         });
       }
       if (typeof mixpanel.track === 'function') {
+        // surface inline (not just via super property) so dashboards
+        // can slice this conversion event by surface even if the
+        // register() race ever loses — Newsletter Subscribed is the
+        // only conversion event on the blog, dropping the dimension
+        // would break the funnel report.
         mixpanel.track('Newsletter Subscribed', {
+          surface: 'blog',
           lang: currentLang,
           profile: profile || 'no indicado',
           marketing: marketing
