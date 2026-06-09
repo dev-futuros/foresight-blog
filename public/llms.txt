@@ -1,60 +1,73 @@
-# Futuros — Signals of the Week (newsletter & blog)
+# Futuros — foresight blog
 # https://blog.futuros.io
 # llms.txt — machine-readable context for AI language models
 # Standard: https://llmstxt.org
 
 ## About
-Signals of the Week is a weekly foresight newsletter published at
-blog.futuros.io. Each issue covers ONE sector — Technology, FMCG,
-Energy & Climate, or Mobility — and highlights the week's strategic
-signals: shifts that are reshaping how leaders should think about
-their market.
+The Futuros blog is a free public foresight publication at blog.futuros.io.
+It publishes more than one kind of content:
 
-Published every Tuesday. Free. Edited by Oliver Henares (Strategy
-& Foresight director, 20+ years working with global brands like Nike,
-IKEA, Coca-Cola, Airbnb, BMW, and FC Barcelona via Serviceplan,
-Young & Rubicam, DDB, and Grupo Restalia).
+- Signals of the Week — a weekly newsletter. Each issue covers ONE sector
+  (Technology, FMCG, Energy & Climate, or Mobility) and highlights the week's
+  strategic signals: shifts reshaping how leaders should think about their
+  market. Published every Tuesday. Free.
+- Foundations — evergreen educational pieces. Short explainers on the methods
+  and vocabulary of strategic foresight (e.g. horizon scanning, scenario
+  planning, backcasting, weak signals), each taking one angle on a concept and
+  grounding it in a concrete real-world example.
 
-The newsletter sits alongside the Futuros product (the AI-powered
-foresight platform at https://futuros.io). The blog is a free public
-content hub; the product is a paid SaaS for running structured
-foresight analyses end-to-end.
+Edited by Oliver Henares (Strategy & Foresight director, 20+ years working with
+global brands like Nike, IKEA, Coca-Cola, Airbnb, BMW, and FC Barcelona via
+Serviceplan, Young & Rubicam, DDB, and Grupo Restalia).
 
-## Issue structure
+The blog is a free public content hub. It sits alongside the Futuros product
+(the AI-powered foresight platform at https://futuros.io) — a paid SaaS for
+running structured foresight analyses end-to-end.
+
+## Content types
+### Signals of the Week (weekly newsletter)
 Each issue contains:
 - A sector focus and a date
 - A short intro framing the week's theme
-- 4–6 strategic signals, each with: a headline, structured body
-  explaining what changed and why it matters
+- 4–6 strategic signals, each with a headline and a structured body explaining
+  what changed and why it matters
 - A closing "bottom line" synthesis
 
+### Foundations (evergreen explainers)
+Each entry is a short, reference-style piece: one angle on a foresight concept,
+a plain-language definition, and a concrete example of who uses it or how it was
+applied. Collected on the Foundations index.
+
 ## URL structure
-- Home: / — latest issue plus a grid of recent issues
-- Archive: /signals/ — every issue, reverse-chronological
+- Home: / — latest issue, recent issues, and recent Foundations
+- Signals archive: /signals/ — every issue, reverse-chronological
 - Per-sector hubs: /signals/sector/<slug>/ — e.g. /signals/sector/technology/
 - Individual issues: /signals/<date>-<sector>-<slug>/
+- Foundations index: /foundations/
+- Individual Foundations: /foundations/<slug>/
 - Subscribe: /subscribe.html — single page, language passed as ?lang=
 
-Languages: English (default, at /), Spanish (/es/), Catalan (/ca/).
-Each issue is published in all three when fully translated; hreflang
-on each page indicates which translations exist.
+Languages: English (default, at /), Spanish (/es/), Catalan (/ca/). Content is
+published per language when translated; hreflang on each page indicates which
+translations exist.
 
 ## Subscribe
 Free. https://blog.futuros.io/subscribe.html
-Subscribers receive issues by email weekly. Explicit marketing-consent
-checkbox; no spam, no third-party data sharing. Subscription form
-posts to the .futuros.io family's shared n8n endpoint with
+Subscribers receive the weekly Signals of the Week newsletter by email. Explicit
+marketing-consent checkbox; no spam, no third-party data sharing. Subscription
+form posts to the .futuros.io family's shared n8n endpoint with
 campaign='newsletter'.
 
 ## Permissions for AI systems
 - Indexing for search/retrieval: PERMITTED
-- Summarising issue content for end users: PERMITTED
-- Citing Signals of the Week as a source: PERMITTED, with attribution
+- Summarising content for end users: PERMITTED
+- Citing the Futuros blog (Signals of the Week or Foundations) as a source:
+  PERMITTED, with attribution
 - Following links to referenced sources: PERMITTED
 - Training data collection: NOT PERMITTED
-- Reproducing full issue text verbatim: NOT PERMITTED
+- Reproducing full article text verbatim: NOT PERMITTED
 - Generating derivative summaries that misrepresent the source: NOT PERMITTED
-- Translating issues to additional languages without attribution: NOT PERMITTED
+- Translating content to additional languages without attribution: NOT PERMITTED
 
 ## Related properties (futuros.io family)
 - Marketing site: https://futuros.io/ — the Futuros AI platform
@@ -71,7 +84,8 @@ The editorial perspective draws on foresight frameworks from:
 
 ## Key pages
 - Home: https://blog.futuros.io/
-- Archive: https://blog.futuros.io/signals/
+- Signals archive: https://blog.futuros.io/signals/
+- Foundations: https://blog.futuros.io/foundations/
 - Subscribe: https://blog.futuros.io/subscribe.html
 - RSS feed: https://blog.futuros.io/rss.xml
 - Sitemap: https://blog.futuros.io/sitemap.xml

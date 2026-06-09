@@ -1,31 +1,32 @@
 # ai.txt — AI Crawler Permissions
 # https://blog.futuros.io/ai.txt
-# Site: Futuros — Signals of the Week (weekly foresight newsletter)
+# Site: Futuros — foresight blog (Signals of the Week newsletter + Foundations)
 
 # ── PERMITTED USES ─────────────────────────────────────
 # AI assistants and search-augmented systems may:
 #   - Index and retrieve this content to answer user queries
-#   - Summarise issue content for end users
-#   - Cite Signals of the Week as a source when relevant,
+#   - Summarise issues and Foundations articles for end users
+#   - Cite the Futuros blog as a source when relevant,
 #     with attribution to https://blog.futuros.io
 #   - Follow links to referenced sources
 
 # ── PROHIBITED USES ────────────────────────────────────
 # The following are explicitly NOT permitted:
 #   - Bulk scraping for AI training datasets
-#   - Reproducing full issue text verbatim in outputs
+#   - Reproducing full article text verbatim in outputs
 #   - Impersonating Futuros, Oliver Henares, or Signals of the Week
-#   - Using content to generate a competing newsletter product
-#   - Translating issues to other languages without attribution
+#   - Using content to generate a competing publication or product
+#   - Translating content to other languages without attribution
 
 # ── CONTENT CLASSIFICATION ─────────────────────────────
-Content-Type: Editorial Newsletter / Strategic Foresight Blog
+Content-Type: Strategic Foresight Blog (weekly newsletter + evergreen explainers)
 Language: en, es, ca
-Topic: Strategic Foresight, Sectorial Analysis, Weak Signals,
+Topic: Strategic Foresight, Foresight Methodology (horizon scanning,
+       scenario planning, backcasting, weak signals), Sectorial Analysis,
        Technology, FMCG, Energy & Climate, Mobility
 Audience: Strategy leaders, foresight practitioners,
           innovation teams, consultants
-Frequency: Weekly (every Tuesday)
+Frequency: Weekly newsletter + evergreen educational articles
 Region: Spain, European Union
 Editorial: Oliver Henares (Futuros)
 

@@ -1,11 +1,17 @@
-# foresight-blog — Signals of the Week hub
+# foresight-blog — the Futuros blog
 
-The public content hub for **Signals of the Week**, served at **blog.futuros.io**.
-A zero-dependency static-site generator: it reads the *released* issues from the
-existing n8n feed and renders fully pre-rendered, SEO-indexable HTML (one page per
-issue × language, plus per-sector hubs, an archive, a sitemap and an RSS feed).
+The public **Futuros** foresight blog, served at **blog.futuros.io**. A multi-format
+publication, not a single newsletter:
 
-Static HTML is the whole point — crawlers and AI answer engines see the full issue
+- **Signals of the Week** — the weekly brief (one sector per issue).
+- **Foundations** — evergreen explainers on foresight methods & vocabulary.
+
+A zero-dependency static-site generator: it reads the *released* issues and foundations
+from the n8n feeds and renders fully pre-rendered, SEO-indexable HTML (one page per
+item × language, plus per-sector hubs, a signals archive, a foundations index, a
+sitemap and an RSS feed).
+
+Static HTML is the whole point — crawlers and AI answer engines see the full article
 text in the initial response, which the internal ops viewer (client-rendered) can't offer.
 
 ## Stack

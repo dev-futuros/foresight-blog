@@ -7,9 +7,10 @@
   Contact: hello@futuros.io
   Location: Barcelona, España
 
-/* NEWSLETTER */
-  Title: Signals of the Week
-  Frequency: Weekly (every Tuesday)
+/* CONTENT */
+  Signals of the Week · weekly foresight newsletter (one sector per issue)
+  Foundations · evergreen explainers on foresight methods & vocabulary
+  Frequency: Signals weekly (every Tuesday); Foundations ongoing
   Cost: Free
   Languages: English, Spanish, Catalan
   Subscribe: https://blog.futuros.io/subscribe.html

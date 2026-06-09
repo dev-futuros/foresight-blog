@@ -57,7 +57,7 @@ function rss(issues){
       `<pubDate>${new Date(it.date + 'T08:00:00Z').toUTCString()}</pubDate><description>${x(cc.preview_text)}</description></item>`;
   }).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>` +
-    `<title>${x(SITE.brand)} — ${x(SITE.title)}</title><link>${SITE.origin}</link>` +
+    `<title>${x(SITE.brand)} — ${x(SITE.newsletter)}</title><link>${SITE.origin}</link>` +
     `<description>${x(SITE.description)}</description>\n${items}\n</channel></rss>\n`;
 }
 

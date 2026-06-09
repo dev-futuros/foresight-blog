@@ -20,7 +20,7 @@ const T = {
     cookiesTitle: 'Cookies & analytics',
     cookiesBody: "We may use analytics tools to understand how Futuros is used and improve it. We don't share data with advertisers or ad-tech third parties.",
     cookiesLearn: 'Privacy Policy', cookiesAccept: 'Accept', cookiesReject: 'Decline' },
-  es: { tagline: 'Foresight semanal sobre los cambios que están redefiniendo la estrategia.', latest: 'Última edición', archive: 'Archivo', subscribe: 'Suscríbete',
+  es: { tagline: 'Foresight sobre las fuerzas que están redefiniendo la estrategia.', latest: 'Última edición', archive: 'Archivo', subscribe: 'Suscríbete',
     subscribeCta: 'Recibe Signals of the Week', subscribeSub: 'Un sector, las señales estratégicas de la semana, cada martes. Gratis.',
     readIssue: 'Leer la edición', allIssues: 'Todas las ediciones', bottomLine: 'En resumen',
     archiveTitle: 'El archivo', archiveSub: 'Todas las ediciones de Signals of the Week.',
@@ -32,7 +32,7 @@ const T = {
     cookiesTitle: 'Cookies y analítica',
     cookiesBody: 'Podemos usar herramientas de analítica para entender cómo se usa Futuros y mejorarlo. No compartimos datos con anunciantes ni terceros publicitarios.',
     cookiesLearn: 'Política de Privacidad', cookiesAccept: 'Aceptar', cookiesReject: 'Rechazar' },
-  ca: { tagline: 'Foresight setmanal sobre els canvis que redefineixen l’estratègia.', latest: 'Última edició', archive: 'Arxiu', subscribe: 'Subscriu-t’hi',
+  ca: { tagline: 'Foresight sobre les forces que redefineixen l’estratègia.', latest: 'Última edició', archive: 'Arxiu', subscribe: 'Subscriu-t’hi',
     subscribeCta: 'Rep Signals of the Week', subscribeSub: 'Un sector, els senyals estratègics de la setmana, cada dimarts. Gratis.',
     readIssue: 'Llegir l’edició', allIssues: 'Totes les edicions', bottomLine: 'En resum',
     archiveTitle: 'L’arxiu', archiveSub: 'Totes les edicions de Signals of the Week.',
@@ -52,7 +52,7 @@ function fmtDate(iso, lang){
   catch { return iso; }
 }
 function c(issue, lang){ return (issue.content && issue.content[lang]) || {}; }
-function cleanSubject(s){ return String(s || '').replace(/^signals of the week\s*[:|-]?\s*/i, '').trim() || SITE.title; }
+function cleanSubject(s){ return String(s || '').replace(/^signals of the week\s*[:|-]?\s*/i, '').trim() || SITE.newsletter; }
 function altsFor(getPath){ return SITE.langs.map(l => ({ lang: l, path: getPath(l) })); }
 
 function head({ lang, title, description, path, alternates, type, published, jsonld }){
@@ -70,7 +70,7 @@ ${altTags}${xDefault ? `<link rel="alternate" hreflang="x-default" href="${SITE.
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:site_name" content="${esc(SITE.brand)} — ${esc(SITE.title)}">
+<meta property="og:site_name" content="${esc(SITE.brand)}">
 <meta property="og:image" content="${SITE.origin}/assets/og-default.png">
 ${published ? `<meta property="article:published_time" content="${published}">` : ''}
 <meta name="twitter:card" content="summary_large_image">
@@ -126,7 +126,7 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
   const sigActive = (active === 'archive' || String(active || '').indexOf('sector:') === 0) ? ' class="on"' : '';
   const sigMenu = `<a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.allIssues)}</a>` +
     sectors.map(s => `<a href="${urlSector(lang, s)}"${active === 'sector:' + s ? ' class="on"' : ''}>${esc(s)}</a>`).join('');
-  const signalsNav = `<details class="nav-dd"><summary${sigActive}>${esc(SITE.title)}</summary><div class="nav-dd-menu">${sigMenu}</div></details>`;
+  const signalsNav = `<details class="nav-dd"><summary${sigActive}>${esc(SITE.newsletter)}</summary><div class="nav-dd-menu">${sigMenu}</div></details>`;
   // Always render all 3 language pills, even if the current page has no
   // alternate in some language. Missing alternates fall back to that
   // language's home so the pill always navigates somewhere useful.
@@ -150,7 +150,7 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
   </div>
 </div>
 <header class="site-head"><div class="wrap site-head-in">
-  <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
+  <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.kicker)}</span></a>
   <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a>${signalsNav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
@@ -295,7 +295,7 @@ export function renderHome(issues, lang, ctx, foundations = []){
   const alternates = altsFor(urlHome);
   const [latest, ...rest] = issues;
   let body = `<section class="hero">
-    <div class="hero-eyebrow">${esc(SITE.title)}</div>
+    <div class="hero-eyebrow">${esc(SITE.kicker)}</div>
     <h1 class="hero-title">${esc(L.tagline)}</h1>
     <p class="hero-sub">${esc(SITE.description)}</p></section>`;
   if(latest){
@@ -318,21 +318,21 @@ export function renderHome(issues, lang, ctx, foundations = []){
       <div class="card-grid">${foundations.slice(0, 4).map(it => foundationCard(it, lang)).join('')}</div>
       <a class="see-all" href="${urlFoundations(lang)}">${esc(L.allFoundations)} →</a></section>`;
   }
-  return page({ lang, title: `${SITE.title} — ${SITE.brand}`, description: SITE.description, path: urlHome(lang), alternates, body, sectors: ctx.sectors, active: 'home' });
+  return page({ lang, title: `${SITE.brand} — ${SITE.kicker}`, description: SITE.description, path: urlHome(lang), alternates, body, sectors: ctx.sectors, active: 'home' });
 }
 
 export function renderArchive(issues, lang, ctx){
   const L = t(lang);
   const body = `<section class="page-head"><h1>${esc(L.archiveTitle)}</h1><p>${esc(L.archiveSub)}</p></section>
     <div class="card-grid">${issues.map(it => issueCard(it, lang)).join('') || `<p class="empty">${esc(L.noIssues)}</p>`}</div>`;
-  return page({ lang, title: `${L.archiveTitle} — ${SITE.title}`, description: `${SITE.title}: ${SITE.description}`, path: urlArchive(lang), alternates: altsFor(urlArchive), body, sectors: ctx.sectors, active: 'archive' });
+  return page({ lang, title: `${L.archiveTitle} — ${SITE.newsletter}`, description: L.archiveSub, path: urlArchive(lang), alternates: altsFor(urlArchive), body, sectors: ctx.sectors, active: 'archive' });
 }
 
 export function renderSector(issues, sector, lang, ctx){
   const L = t(lang);
   const body = `<section class="page-head"><div class="ph-eyebrow">${esc(L.sectorIn)}</div><h1>${esc(sector)}</h1></section>
     <div class="card-grid">${issues.map(it => issueCard(it, lang)).join('') || `<p class="empty">${esc(L.noIssues)}</p>`}</div>`;
-  return page({ lang, title: `${sector} — ${SITE.title}`, description: `${SITE.title}: weekly ${sector} foresight signals.`, path: urlSector(lang, sector), alternates: altsFor(l => urlSector(l, sector)), body, sectors: ctx.sectors, active: 'sector:' + sector });
+  return page({ lang, title: `${sector} — ${SITE.newsletter}`, description: `Weekly ${sector} foresight signals — ${SITE.newsletter}.`, path: urlSector(lang, sector), alternates: altsFor(l => urlSector(l, sector)), body, sectors: ctx.sectors, active: 'sector:' + sector });
 }
 
 export function renderIssue(issue, lang, ctx){
@@ -383,7 +383,7 @@ try {
   });
 } catch(_) {}
 </script>`;
-  return page({ lang, title: `${subject} — ${SITE.title}`, description: cc.preview_text || SITE.description, path: urlIssue(lang, issue), alternates, type: 'article', published: issue.date + 'T08:00:00Z', jsonld, body, sectors: ctx.sectors, active: 'sector:' + issue.sector });
+  return page({ lang, title: `${subject} — ${SITE.newsletter}`, description: cc.preview_text || SITE.description, path: urlIssue(lang, issue), alternates, type: 'article', published: issue.date + 'T08:00:00Z', jsonld, body, sectors: ctx.sectors, active: 'sector:' + issue.sector });
 }
 
 // ── Foundations (evergreen educational entries) ─────────────────────────────

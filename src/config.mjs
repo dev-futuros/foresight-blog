@@ -1,9 +1,13 @@
 // Site-wide configuration for the Signals of the Week public hub.
 export const SITE = {
   brand: 'Futuros',
-  title: 'Signals of the Week',
-  tagline: 'Weekly foresight on the shifts reshaping strategy.',
-  description: 'A weekly foresight brief — the strategic signals reshaping one sector at a time: technology, FMCG, energy & climate, and mobility.',
+  // The blog is a multi-format publication, not a single newsletter:
+  // Signals of the Week (the weekly brief) + Foundations (evergreen explainers),
+  // with room for more types. `newsletter` names just the weekly section/feed.
+  newsletter: 'Signals of the Week',
+  kicker: 'Foresight & strategy',     // header sub-label + home hero eyebrow
+  tagline: 'Foresight on the forces reshaping strategy.',
+  description: 'Strategic foresight from Futuros — weekly signals on one sector at a time, plus foundations on the methods and language of the field.',
   origin: 'https://blog.futuros.io',          // the hub's own subdomain
   siteUrl: 'https://futuros.io',               // the marketing site
   // Base path of the subscribe page (rendered into dist/subscribe.html
