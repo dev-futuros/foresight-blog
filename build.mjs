@@ -5,10 +5,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { SITE } from './src/config.mjs';
-import { fetchIssues } from './src/data.mjs';
-import { renderHome, renderArchive, renderSector, renderIssue } from './src/templates.mjs';
+import { fetchIssues, fetchFoundations } from './src/data.mjs';
+import { renderHome, renderArchive, renderSector, renderIssue, renderFoundationsIndex, renderFoundation } from './src/templates.mjs';
 import { renderSubscribe } from './src/subscribe-template.mjs';
-import { urlHome, urlArchive, urlSector, urlIssue } from './src/urls.mjs';
+import { urlHome, urlArchive, urlSector, urlIssue, urlFoundations, urlFoundation } from './src/urls.mjs';
 import { slugify } from './src/util.mjs';
 
 const DIST = path.resolve('dist');
@@ -33,13 +33,17 @@ function copyDir(src, dst){
   }
 }
 
-function sitemap(issues, present){
+function sitemap(issues, present, foundations){
   const urls = [];
   const add = (p, lastmod) => urls.push(`<url><loc>${SITE.origin}${p}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`);
   for(const lang of SITE.langs){
     add(urlHome(lang)); add(urlArchive(lang));
     for(const s of present) add(urlSector(lang, s));
     for(const it of issues.filter(i => i.content && i.content[lang])) add(urlIssue(lang, it), it.date);
+    if((foundations || []).length){
+      add(urlFoundations(lang));
+      for(const it of foundations.filter(i => i.content && i.content[lang] && i.content[lang].title)) add(urlFoundation(lang, it), it.date);
+    }
   }
   // Subscribe page is a single URL — runtime i18n covers all languages.
   add('/subscribe.html');
@@ -72,6 +76,13 @@ async function main(){
   const issues = (await fetchIssues()).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   console.log(`Building ${issues.length} released issue(s)…`);
 
+  // Foundations are additive — a feed failure must not break the issue build.
+  let foundations = [];
+  try {
+    foundations = (await fetchFoundations()).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    console.log(`Building ${foundations.length} foundation(s)…`);
+  } catch(e){ console.warn('Foundations feed skipped:', e.message); }
+
   // Sector hubs are data-driven: only sectors that actually have issues get a
   // page, ordered by the known set first, then any legacy sectors after.
   const present = [...new Set(issues.map(i => i.sector).filter(Boolean))];
@@ -90,6 +101,11 @@ async function main(){
       writePage(urlSector(lang, sector), renderSector(li.filter(it => sameSector(it.sector, sector)), sector, lang, ctx)); pageCount++;
     }
     for(const it of li){ writePage(urlIssue(lang, it), renderIssue(it, lang, ctx)); pageCount++; }
+    // Foundations: always emit the index (so the nav link never 404s, even
+    // when the feed is empty or unavailable), plus a page per entry.
+    const fi = foundations.filter(it => it.content && it.content[lang] && it.content[lang].title);
+    writePage(urlFoundations(lang), renderFoundationsIndex(fi, lang, ctx)); pageCount++;
+    for(const it of fi){ writePage(urlFoundation(lang, it), renderFoundation(it, lang, ctx)); pageCount++; }
   }
 
   // Standalone subscribe page. Single file at /subscribe.html — language
@@ -99,7 +115,7 @@ async function main(){
   // covers all three.
   writeFile('subscribe.html', renderSubscribe());
 
-  writeFile('sitemap.xml', sitemap(issues, present));
+  writeFile('sitemap.xml', sitemap(issues, present, foundations));
   writeFile('rss.xml', rss(issues));
   writeFile('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.origin}/sitemap.xml\n`);
   writeFile('_headers', `/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/*\n  X-Robots-Tag: index, follow\n  Cache-Control: public, max-age=600, must-revalidate\n`);

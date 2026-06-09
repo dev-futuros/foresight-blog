@@ -20,4 +20,8 @@ export const SITE = {
   // Released-issues feed (your n8n endpoint; returns Content JSON + Status).
   // Override at build time with BLOG_FEED, or read a local file with BLOG_DATA_FILE.
   feed: process.env.BLOG_FEED || 'https://futuros.app.n8n.cloud/webhook/api/signals',
+  // Foundations feed — the same endpoint the ops editor reads; the build keeps
+  // only Status = Released. Override with BLOG_FOUNDATIONS_FEED or a local file
+  // via BLOG_FOUNDATIONS_FILE.
+  foundationsFeed: process.env.BLOG_FOUNDATIONS_FEED || 'https://futuros.app.n8n.cloud/webhook/api/foundations',
 };

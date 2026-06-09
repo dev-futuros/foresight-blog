@@ -21,6 +21,40 @@ export async function fetchIssues(){
   return arr.map(normalize).filter(it => it && it.released && it.content);
 }
 
+// Foundations: evergreen educational entries. Same provider shape as issues
+// (Content JSON + Status), kept to Status = Released with a usable EN title.
+export async function fetchFoundations(){
+  let raw;
+  if(process.env.BLOG_FOUNDATIONS_FILE){
+    raw = JSON.parse(fs.readFileSync(process.env.BLOG_FOUNDATIONS_FILE, 'utf8'));
+  } else {
+    const res = await fetch(SITE.foundationsFeed, { headers: { 'cache-control': 'no-cache' } });
+    if(!res.ok) throw new Error('foundations feed failed: ' + res.status);
+    const text = await res.text();
+    raw = text.trim() ? JSON.parse(text) : [];
+  }
+  if(Array.isArray(raw) && raw.length === 1 && raw[0] && raw[0].records) raw = raw[0];
+  const arr = raw.foundations || raw.records || (Array.isArray(raw) ? raw : []);
+  return arr.map(normalizeFoundation).filter(it => it && it.released && it.content && it.content.en && it.content.en.title);
+}
+
+function normalizeFoundation(rec){
+  const f = rec.fields || rec;
+  const status = String(f.Status || f.status || '').trim().toLowerCase();
+  let content = f['Content JSON'] ?? f.content_json ?? f.content;
+  if(typeof content === 'string'){ try { content = JSON.parse(content); } catch { content = null; } }
+  const title = (content && content.en && content.en.title) || f.Title || f.title || '';
+  return {
+    id: rec.id || f.record_id || '',
+    date: f.Date || f.date || '',
+    author: f.Author || f.author || SITE.author.name,
+    keyword: f.Keyword || f.keyword || '',
+    released: status === 'released',
+    content,   // { en, es, ca } each { title, summary, meta, body(markdown) }
+    slug: (f.Slug || f.slug || '') || slugify(title),
+  };
+}
+
 function pickFirst(c){ return c.en || c.es || c.ca || Object.values(c)[0] || {}; }
 function stripPrefix(s){
   return String(s || '')

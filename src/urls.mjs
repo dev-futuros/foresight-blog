@@ -5,3 +5,5 @@ export function urlHome(lang){ return pfx(lang) + '/'; }
 export function urlArchive(lang){ return pfx(lang) + '/signals/'; }
 export function urlSector(lang, sector){ return pfx(lang) + '/signals/sector/' + slugify(sector) + '/'; }
 export function urlIssue(lang, issue){ return pfx(lang) + '/signals/' + issue.slug + '/'; }
+export function urlFoundations(lang){ return pfx(lang) + '/foundations/'; }
+export function urlFoundation(lang, item){ return pfx(lang) + '/foundations/' + item.slug + '/'; }

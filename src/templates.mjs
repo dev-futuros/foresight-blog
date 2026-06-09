@@ -1,8 +1,8 @@
 // Page templates. Each renderer returns a full HTML document string.
 import { SITE } from './config.mjs';
 import { esc } from './util.mjs';
-import { paras, bodyToHtml, plainText } from './render.mjs';
-import { urlHome, urlArchive, urlSector, urlIssue } from './urls.mjs';
+import { paras, bodyToHtml, plainText, mdToHtml } from './render.mjs';
+import { urlHome, urlArchive, urlSector, urlIssue, urlFoundations, urlFoundation } from './urls.mjs';
 
 const HTML_LANG = { en: 'en', es: 'es', ca: 'ca' };
 const YEAR = new Date().getFullYear();
@@ -13,6 +13,9 @@ const T = {
     readIssue: 'Read the issue', allIssues: 'All issues', bottomLine: 'The bottom line',
     archiveTitle: 'The archive', archiveSub: 'Every issue of Signals of the Week.',
     sectorIn: 'Sector', noIssues: 'No issues published yet.', back: '← All issues', dateLocale: 'en-GB',
+    foundations: 'Foundations', foundationsTitle: 'Foundations',
+    foundationsSub: 'Foresight, explained — the methods and the vocabulary behind the practice.',
+    foundationsRead: 'Read', foundationsBack: '← All Foundations', foundationsEmpty: 'Nothing here yet.',
     cookiesTitle: 'Cookies & analytics',
     cookiesBody: "We may use analytics tools to understand how Futuros is used and improve it. We don't share data with advertisers or ad-tech third parties.",
     cookiesLearn: 'Privacy Policy', cookiesAccept: 'Accept', cookiesReject: 'Decline' },
@@ -21,6 +24,9 @@ const T = {
     readIssue: 'Leer la edición', allIssues: 'Todas las ediciones', bottomLine: 'En resumen',
     archiveTitle: 'El archivo', archiveSub: 'Todas las ediciones de Signals of the Week.',
     sectorIn: 'Sector', noIssues: 'Aún no hay ediciones publicadas.', back: '← Todas las ediciones', dateLocale: 'es-ES',
+    foundations: 'Fundamentos', foundationsTitle: 'Fundamentos',
+    foundationsSub: 'El foresight, explicado — los métodos y el vocabulario de la práctica.',
+    foundationsRead: 'Leer', foundationsBack: '← Todos los fundamentos', foundationsEmpty: 'Aún no hay nada aquí.',
     cookiesTitle: 'Cookies y analítica',
     cookiesBody: 'Podemos usar herramientas de analítica para entender cómo se usa Futuros y mejorarlo. No compartimos datos con anunciantes ni terceros publicitarios.',
     cookiesLearn: 'Política de Privacidad', cookiesAccept: 'Aceptar', cookiesReject: 'Rechazar' },
@@ -29,6 +35,9 @@ const T = {
     readIssue: 'Llegir l’edició', allIssues: 'Totes les edicions', bottomLine: 'En resum',
     archiveTitle: 'L’arxiu', archiveSub: 'Totes les edicions de Signals of the Week.',
     sectorIn: 'Sector', noIssues: 'Encara no hi ha edicions publicades.', back: '← Totes les edicions', dateLocale: 'ca-ES',
+    foundations: 'Fonaments', foundationsTitle: 'Fonaments',
+    foundationsSub: 'El foresight, explicat — els mètodes i el vocabulari de la pràctica.',
+    foundationsRead: 'Llegir', foundationsBack: '← Tots els fonaments', foundationsEmpty: 'Encara no hi ha res aquí.',
     cookiesTitle: 'Cookies i analítica',
     cookiesBody: "Podem fer servir eines d'analítica per entendre com s'utilitza Futuros i millorar-lo. No compartim dades amb anunciants ni tercers publicitaris.",
     cookiesLearn: 'Política de Privacitat', cookiesAccept: 'Acceptar', cookiesReject: 'Rebutjar' },
@@ -136,7 +145,7 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
 </div>
 <header class="site-head"><div class="wrap site-head-in">
   <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
-  <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
+  <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
 <section class="subscribe"><div class="wrap subscribe-in">
@@ -358,4 +367,60 @@ try {
 } catch(_) {}
 </script>`;
   return page({ lang, title: `${subject} — ${SITE.title}`, description: cc.preview_text || SITE.description, path: urlIssue(lang, issue), alternates, type: 'article', published: issue.date + 'T08:00:00Z', jsonld, body, sectors: ctx.sectors, active: 'sector:' + issue.sector });
+}
+
+// ── Foundations (evergreen educational entries) ─────────────────────────────
+function fc(item, lang){ return (item.content && item.content[lang]) || {}; }
+
+function foundationCard(item, lang){
+  const cc = fc(item, lang); const L = t(lang);
+  const tag = item.keyword ? String(item.keyword).toUpperCase() : L.foundations.toUpperCase();
+  return `<a class="card" href="${urlFoundation(lang, item)}">
+  <div class="card-meta"><span class="card-sector">${esc(tag)}</span>${item.date ? `<span class="card-date">${fmtDate(item.date, lang)}</span>` : ''}</div>
+  <h3 class="card-title">${esc(cc.title || '')}</h3>
+  ${cc.summary ? `<p class="card-preview">${esc(cc.summary)}</p>` : ''}
+  <span class="card-more">${esc(L.foundationsRead)} →</span></a>`;
+}
+
+export function renderFoundationsIndex(items, lang, ctx){
+  const L = t(lang);
+  const body = `<section class="page-head"><div class="ph-eyebrow">${esc(L.foundations)}</div><h1>${esc(L.foundationsTitle)}</h1><p>${esc(L.foundationsSub)}</p></section>
+    <div class="card-grid">${items.map(it => foundationCard(it, lang)).join('') || `<p class="empty">${esc(L.foundationsEmpty)}</p>`}</div>`;
+  return page({ lang, title: `${L.foundationsTitle} — ${SITE.brand}`, description: L.foundationsSub, path: urlFoundations(lang), alternates: altsFor(urlFoundations), body, sectors: ctx.sectors, active: 'foundations' });
+}
+
+export function renderFoundation(item, lang, ctx){
+  const cc = fc(item, lang); const L = t(lang);
+  const title = cc.title || '';
+  const desc = cc.meta || cc.summary || SITE.description;
+  const alternates = SITE.langs.filter(l => item.content[l] && item.content[l].title).map(l => ({ lang: l, path: urlFoundation(l, item) }));
+  const jsonld = {
+    '@context': 'https://schema.org', '@type': 'TechArticle',
+    headline: title, description: cc.meta || cc.summary || '',
+    inLanguage: lang,
+    ...(item.date ? { datePublished: item.date, dateModified: item.date } : {}),
+    author: { '@type': 'Organization', name: SITE.author.org },
+    publisher: { '@type': 'Organization', name: SITE.author.org, url: SITE.siteUrl },
+    mainEntityOfPage: SITE.origin + urlFoundation(lang, item),
+    image: SITE.origin + '/assets/og-default.png',
+    articleBody: plainText([cc.summary, cc.body].filter(Boolean).join(' ')).slice(0, 5000),
+  };
+  let body = `<article class="issue fnd">
+    <div class="issue-meta"><a class="issue-sector" href="${urlFoundations(lang)}">${esc(L.foundations.toUpperCase())}</a>${item.date ? `<span class="dot">·</span><time datetime="${item.date}">${fmtDate(item.date, lang)}</time>` : ''}</div>
+    <h1 class="issue-title">${esc(title)}</h1>
+    ${cc.summary ? `<p class="issue-lede">${esc(cc.summary)}</p>` : ''}
+    <div class="fnd-prose">${mdToHtml(cc.body)}</div>
+    <div class="issue-foot"><a href="${urlFoundations(lang)}">${esc(L.foundationsBack)}</a></div></article>`;
+  body += `<script>
+try {
+  mixpanel.track('Article Viewed', {
+    surface: 'blog', article_type: 'foundation',
+    article_slug: ${JSON.stringify(item.slug)},
+    article_title: ${JSON.stringify(title)},
+    article_keyword: ${JSON.stringify(item.keyword || '')},
+    lang: ${JSON.stringify(lang)}
+  });
+} catch(_) {}
+</script>`;
+  return page({ lang, title: `${title} — ${SITE.brand}`, description: desc, path: urlFoundation(lang, item), alternates, type: 'article', published: item.date ? item.date + 'T08:00:00Z' : undefined, jsonld, body, sectors: ctx.sectors, active: 'foundations' });
 }
