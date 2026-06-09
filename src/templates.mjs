@@ -122,11 +122,10 @@ try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pat
 
 function page({ lang, title, description, path, alternates, type = 'website', published, jsonld, body, sectors = [], active }){
   const L = t(lang);
-  // Signals of the Week → a dropdown: "All issues" (the archive) + each sector.
+  // Signals of the Week → for now a plain link to the archive (the "All" page).
+  // The sector dropdown is parked; the .nav-dd styles/JS stay for an easy re-enable.
   const sigActive = (active === 'archive' || String(active || '').indexOf('sector:') === 0) ? ' class="on"' : '';
-  const sigMenu = `<a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.allIssues)}</a>` +
-    sectors.map(s => `<a href="${urlSector(lang, s)}"${active === 'sector:' + s ? ' class="on"' : ''}>${esc(s)}</a>`).join('');
-  const signalsNav = `<details class="nav-dd"><summary${sigActive}>${esc(SITE.newsletter)}</summary><div class="nav-dd-menu">${sigMenu}</div></details>`;
+  const signalsNav = `<a href="${urlArchive(lang)}"${sigActive}>${esc(SITE.newsletter)}</a>`;
   // Always render all 3 language pills, even if the current page has no
   // alternate in some language. Missing alternates fall back to that
   // language's home so the pill always navigates somewhere useful.
