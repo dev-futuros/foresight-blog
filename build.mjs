@@ -95,7 +95,8 @@ async function main(){
   let pageCount = 0;
   for(const lang of SITE.langs){
     const li = issues.filter(it => it.content && it.content[lang]);
-    writePage(urlHome(lang), renderHome(li, lang, ctx)); pageCount++;
+    const fi = foundations.filter(it => it.content && it.content[lang] && it.content[lang].title);
+    writePage(urlHome(lang), renderHome(li, lang, ctx, fi)); pageCount++;
     writePage(urlArchive(lang), renderArchive(li, lang, ctx)); pageCount++;
     for(const sector of sectors){
       writePage(urlSector(lang, sector), renderSector(li.filter(it => sameSector(it.sector, sector)), sector, lang, ctx)); pageCount++;
@@ -103,7 +104,6 @@ async function main(){
     for(const it of li){ writePage(urlIssue(lang, it), renderIssue(it, lang, ctx)); pageCount++; }
     // Foundations: always emit the index (so the nav link never 404s, even
     // when the feed is empty or unavailable), plus a page per entry.
-    const fi = foundations.filter(it => it.content && it.content[lang] && it.content[lang].title);
     writePage(urlFoundations(lang), renderFoundationsIndex(fi, lang, ctx)); pageCount++;
     for(const it of fi){ writePage(urlFoundation(lang, it), renderFoundation(it, lang, ctx)); pageCount++; }
   }

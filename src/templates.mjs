@@ -16,6 +16,7 @@ const T = {
     foundations: 'Foundations', foundationsTitle: 'Foundations',
     foundationsSub: 'Foresight, explained — the methods and the vocabulary behind the practice.',
     foundationsRead: 'Read', foundationsBack: '← All Foundations', foundationsEmpty: 'Nothing here yet.',
+    allFoundations: 'All Foundations',
     cookiesTitle: 'Cookies & analytics',
     cookiesBody: "We may use analytics tools to understand how Futuros is used and improve it. We don't share data with advertisers or ad-tech third parties.",
     cookiesLearn: 'Privacy Policy', cookiesAccept: 'Accept', cookiesReject: 'Decline' },
@@ -27,6 +28,7 @@ const T = {
     foundations: 'Fundamentos', foundationsTitle: 'Fundamentos',
     foundationsSub: 'El foresight, explicado — los métodos y el vocabulario de la práctica.',
     foundationsRead: 'Leer', foundationsBack: '← Todos los fundamentos', foundationsEmpty: 'Aún no hay nada aquí.',
+    allFoundations: 'Todos los fundamentos',
     cookiesTitle: 'Cookies y analítica',
     cookiesBody: 'Podemos usar herramientas de analítica para entender cómo se usa Futuros y mejorarlo. No compartimos datos con anunciantes ni terceros publicitarios.',
     cookiesLearn: 'Política de Privacidad', cookiesAccept: 'Aceptar', cookiesReject: 'Rechazar' },
@@ -38,6 +40,7 @@ const T = {
     foundations: 'Fonaments', foundationsTitle: 'Fonaments',
     foundationsSub: 'El foresight, explicat — els mètodes i el vocabulari de la pràctica.',
     foundationsRead: 'Llegir', foundationsBack: '← Tots els fonaments', foundationsEmpty: 'Encara no hi ha res aquí.',
+    allFoundations: 'Tots els fonaments',
     cookiesTitle: 'Cookies i analítica',
     cookiesBody: "Podem fer servir eines d'analítica per entendre com s'utilitza Futuros i millorar-lo. No compartim dades amb anunciants ni tercers publicitaris.",
     cookiesLearn: 'Política de Privacitat', cookiesAccept: 'Acceptar', cookiesReject: 'Rebutjar' },
@@ -119,8 +122,11 @@ try { mixpanel.track('Page Viewed', { surface: 'blog', path: window.location.pat
 
 function page({ lang, title, description, path, alternates, type = 'website', published, jsonld, body, sectors = [], active }){
   const L = t(lang);
-  const nav = sectors.map(s =>
-    `<a href="${urlSector(lang, s)}"${active === 'sector:' + s ? ' class="on"' : ''}>${esc(s)}</a>`).join('');
+  // Signals of the Week → a dropdown: "All issues" (the archive) + each sector.
+  const sigActive = (active === 'archive' || String(active || '').indexOf('sector:') === 0) ? ' class="on"' : '';
+  const sigMenu = `<a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.allIssues)}</a>` +
+    sectors.map(s => `<a href="${urlSector(lang, s)}"${active === 'sector:' + s ? ' class="on"' : ''}>${esc(s)}</a>`).join('');
+  const signalsNav = `<details class="nav-dd"><summary${sigActive}>${esc(SITE.title)}</summary><div class="nav-dd-menu">${sigMenu}</div></details>`;
   // Always render all 3 language pills, even if the current page has no
   // alternate in some language. Missing alternates fall back to that
   // language's home so the pill always navigates somewhere useful.
@@ -145,7 +151,7 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
 </div>
 <header class="site-head"><div class="wrap site-head-in">
   <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.title)}</span></a>
-  <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a><a href="${urlArchive(lang)}"${active === 'archive' ? ' class="on"' : ''}>${esc(L.archive)}</a>${nav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
+  <nav class="site-nav"><a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">← futuros.io</a>${signalsNav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
 <section class="subscribe"><div class="wrap subscribe-in">
@@ -180,6 +186,11 @@ ${langToggle}
   // subdomain sees the user's current choice. 1-year max-age matches
   // the marketing site's lang cookie.
   writeLangCookie(LANG);
+  // Close the Signals-of-the-Week nav dropdown when clicking outside it.
+  document.addEventListener('click', function(e){
+    var dds = document.querySelectorAll('details.nav-dd[open]');
+    for (var k = 0; k < dds.length; k++) { if (!dds[k].contains(e.target)) dds[k].removeAttribute('open'); }
+  });
   // Pill click handler: write the NEW language to the cookie BEFORE the
   // browser navigates to the new page. Without this, the head-script
   // redirect on the next page reads the stale cookie (=current page's
@@ -279,7 +290,7 @@ function issueCard(issue, lang){
   <span class="card-more">${esc(L.readIssue)} →</span></a>`;
 }
 
-export function renderHome(issues, lang, ctx){
+export function renderHome(issues, lang, ctx, foundations = []){
   const L = t(lang);
   const alternates = altsFor(urlHome);
   const [latest, ...rest] = issues;
@@ -301,6 +312,12 @@ export function renderHome(issues, lang, ctx){
       <div class="card-grid">${rest.map(it => issueCard(it, lang)).join('')}</div></section>`;
   }
   if(!issues.length) body += `<p class="empty">${esc(L.noIssues)}</p>`;
+  // Foundations: a visually distinct block (cool pill) below the issues.
+  if(foundations && foundations.length){
+    body += `<section class="grid-section grid-section--fnd"><div class="section-label section-label--fnd">${esc(L.foundations)}</div>
+      <div class="card-grid">${foundations.slice(0, 4).map(it => foundationCard(it, lang)).join('')}</div>
+      <a class="see-all" href="${urlFoundations(lang)}">${esc(L.allFoundations)} →</a></section>`;
+  }
   return page({ lang, title: `${SITE.title} — ${SITE.brand}`, description: SITE.description, path: urlHome(lang), alternates, body, sectors: ctx.sectors, active: 'home' });
 }
 
@@ -375,7 +392,7 @@ function fc(item, lang){ return (item.content && item.content[lang]) || {}; }
 function foundationCard(item, lang){
   const cc = fc(item, lang); const L = t(lang);
   const tag = item.keyword ? String(item.keyword).toUpperCase() : L.foundations.toUpperCase();
-  return `<a class="card" href="${urlFoundation(lang, item)}">
+  return `<a class="card card--fnd" href="${urlFoundation(lang, item)}">
   <div class="card-meta"><span class="card-sector">${esc(tag)}</span>${item.date ? `<span class="card-date">${fmtDate(item.date, lang)}</span>` : ''}</div>
   <h3 class="card-title">${esc(cc.title || '')}</h3>
   ${cc.summary ? `<p class="card-preview">${esc(cc.summary)}</p>` : ''}
