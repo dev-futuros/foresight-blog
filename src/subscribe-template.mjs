@@ -13,6 +13,7 @@
 // The page is self-contained: Mixpanel snippet, consent banner, i18n,
 // form submission. All cookies are written to `.futuros.io` so they
 // sync with the marketing site, the app, and the rest of the blog.
+import { BUILD_ID } from './templates.mjs';
 export function renderSubscribe(){
   return `<!DOCTYPE html>
 <html lang="es" prefix="og: https://ogp.me/ns#">
@@ -45,7 +46,7 @@ export function renderSubscribe(){
      so the topbar logo matches the rest of blog.futuros.io. Loaded
      second so its :root tokens override marketing's where they overlap
      (--bg / --text / --muted are nearly identical between the two). -->
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/styles.css?v=${BUILD_ID}">
 
 <!-- Mixpanel analytics (EU residency) -->
 <script>

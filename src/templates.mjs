@@ -6,6 +6,9 @@ import { urlHome, urlArchive, urlSector, urlIssue, urlFoundations, urlFoundation
 
 const HTML_LANG = { en: 'en', es: 'es', ca: 'ca' };
 const YEAR = new Date().getFullYear();
+// Cache-buster for /assets/* (served immutable with a 1-year max-age via
+// _headers). Stamped per build so new HTML always pulls the fresh stylesheet.
+export const BUILD_ID = Date.now().toString(36);
 
 const T = {
   en: { tagline: SITE.tagline, latest: 'Latest issue', archive: 'Archive', subscribe: 'Subscribe',
@@ -92,7 +95,7 @@ ${published ? `<meta property="article:published_time" content="${published}">` 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/styles.css?v=${BUILD_ID}">
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ''}
 <!-- Mixpanel analytics (EU residency, opt-out by default). Same project
      as the marketing site so dashboards span the .futuros.io family.
