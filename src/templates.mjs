@@ -400,7 +400,7 @@ function foundationCard(item, lang){
 
 export function renderFoundationsIndex(items, lang, ctx){
   const L = t(lang);
-  const body = `<section class="page-head"><div class="ph-eyebrow">${esc(L.foundations)}</div><h1>${esc(L.foundationsTitle)}</h1><p>${esc(L.foundationsSub)}</p></section>
+  const body = `<section class="page-head"><h1>${esc(L.foundationsTitle)}</h1><p>${esc(L.foundationsSub)}</p></section>
     <div class="card-grid">${items.map(it => foundationCard(it, lang)).join('') || `<p class="empty">${esc(L.foundationsEmpty)}</p>`}</div>`;
   return page({ lang, title: `${L.foundationsTitle} — ${SITE.brand}`, description: L.foundationsSub, path: urlFoundations(lang), alternates: altsFor(urlFoundations), body, sectors: ctx.sectors, active: 'foundations' });
 }
