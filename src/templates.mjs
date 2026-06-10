@@ -299,16 +299,14 @@ export function renderHome(issues, lang, ctx, foundations = []){
     <p class="hero-sub">${esc(SITE.description)}</p></section>`;
   if(latest){
     const cc = c(latest, lang);
-    body += `<section class="latest"><div class="section-label">${esc(L.latest)}</div>
+    body += `<section class="latest"><div class="section-label section-label--sig">${esc(SITE.newsletter)}</div>
       <a class="card card--feature" href="${urlIssue(lang, latest)}">
         <div class="card-meta"><span class="card-sector">${esc(String(latest.sector).toUpperCase())}</span><span class="card-date">${fmtDate(latest.date, lang)}</span></div>
         <h2 class="card-title">${esc(cleanSubject(cc.subject_line))}</h2>
         ${cc.preview_text ? `<p class="card-preview">${esc(cc.preview_text)}</p>` : ''}
-        <span class="card-more">${esc(L.readIssue)} →</span></a></section>`;
-  }
-  if(rest.length){
-    body += `<section class="grid-section"><div class="section-label">${esc(L.allIssues)}</div>
-      <div class="card-grid">${rest.map(it => issueCard(it, lang)).join('')}</div></section>`;
+        <span class="card-more">${esc(L.readIssue)} →</span></a>
+      ${rest.length ? `<div class="card-grid latest-grid">${rest.slice(0, 6).map(it => issueCard(it, lang)).join('')}</div>` : ''}
+      <a class="see-all" href="${urlArchive(lang)}">${esc(L.allIssues)} →</a></section>`;
   }
   if(!issues.length) body += `<p class="empty">${esc(L.noIssues)}</p>`;
   // Foundations: a visually distinct block (cool pill) below the issues.

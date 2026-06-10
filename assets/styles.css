@@ -211,5 +211,12 @@ a{color:inherit;text-decoration:none;}
 .card--fnd .card-more{color:var(--fnd);}
 .section-label--fnd{color:var(--fnd);}
 .grid-section--fnd{margin-top:14px;border-top:1px solid var(--line);padding-top:30px;}
-.see-all{display:inline-block;margin-top:16px;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--fnd);}
+.see-all{display:inline-block;margin-top:16px;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--accent);}
 .see-all:hover{color:var(--text);}
+.grid-section--fnd .see-all{color:var(--fnd);}
+.grid-section--fnd .see-all:hover{color:var(--text);}
+/* Home signals block: issue grid sits between the feature card and "All issues →" */
+.latest-grid{margin-top:18px;}
+
+/* Home: the signals section label mirrors the Foundations one, in the gold identity */
+.section-label--sig{color:var(--accent);}
