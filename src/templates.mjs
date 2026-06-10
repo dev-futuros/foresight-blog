@@ -149,11 +149,8 @@ function page({ lang, title, description, path, alternates, type = 'website', pu
   </div>
 </div>
 <header class="site-head"><div class="wrap site-head-in">
-  <div class="site-head-left">
-    <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.kicker)}</span></a>
-    <a href="${SITE.siteUrl}/?lang=${lang}" class="nav-back">futuros.io</a>
-  </div>
-  <nav class="site-nav">${signalsNav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
+  <a class="brand" href="${urlHome(lang)}"><span class="brand-mark">Futuros</span><span class="brand-sub">${esc(SITE.kicker)}</span></a>
+  <nav class="site-nav">${signalsNav}<a href="${urlFoundations(lang)}"${active === 'foundations' ? ' class="on"' : ''}>${esc(L.foundations)}</a><a class="nav-ghost" href="${SITE.siteUrl}/?lang=${lang}">futuros.io ↗</a><a class="nav-cta" href="${SITE.newsletterUrl}?lang=${lang}">${esc(L.subscribe)}</a></nav>
 </div></header>
 <main class="wrap main">${body}</main>
 <section class="subscribe"><div class="wrap subscribe-in">
