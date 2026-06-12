@@ -7,7 +7,14 @@
   "scripts": {
     "build": "node build.mjs",
     "serve": "npx --yes serve dist -l 8088",
-    "dev": "node build.mjs && npx --yes serve dist -l 8088"
+    "dev": "node build.mjs && npx --yes serve dist -l 8088",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "wrangler": "^4.100.0"
+  }
 }
